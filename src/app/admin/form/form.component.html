@@ -1,0 +1,77 @@
+<div id="page-wrapper">
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Forms
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <form *ngIf="active" (ngSubmit)="onSubmit()" #browserFrom="ngForm">
+                                <div class="form-group">
+                                    <label>Rendering Engine</label>
+                                    <input class="form-control" placeholder="Enter text" required id="renderingEngine" [ngModel]="model.renderingEngine" name="renderingEngine" (ngModelChange)="model.renderingEngine = $event">
+                                    <p class="help-block">Example block-level help text here.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Browser</label>
+                                    <input class="form-control" placeholder="Enter text" id="browser" name="browser" [(ngModel)]="model.browser">
+                                </div>
+                                <div class="form-group">
+                                    <label>Platform</label>
+                                    <input class="form-control" placeholder="Enter text" requeired id="platform" name="platform" [(ngModel)]="model.platform">
+                                </div>
+                                <div class="form-group">
+                                    <label>Engine Version</label>
+                                    <input class="form-control" placeholder="Enter text" required id="engineVersion" name="engineVersion" [(ngModel)]="model.engineVersion">
+                                </div>
+                                <div class="form-group">
+                                    <label>CSS</label>
+                                    <input class="form-control" placeholder="Enter text" required id="css" name="css" [(ngModel)]="model.css">
+                                </div>
+
+                                <a (click)="onSubmit();" class="btn btn-default">Submit </a>
+                                <a (click)="reset();" class="btn btn-default">Reset </a>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.row (nested) -->
+                    <div class="row">
+                        <div [hidden]="!submitted">
+                            <h2>You submitted the following:</h2>
+                            <div class="row">
+                                <div class="col-xs-3">Rendering Engine</div>
+                                <div class="col-xs-9  pull-left">{{ model.renderingEngine }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">Browser</div>
+                                <div class="col-xs-9 pull-left">{{ model.browser }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">Platform</div>
+                                <div class="col-xs-9 pull-left">{{ model.platform }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">EngineVersion</div>
+                                <div class="col-xs-9 pull-left">{{ model.engineVersion }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">CSS</div>
+                                <div class="col-xs-9 pull-left">{{ model.css }}</div>
+                            </div>
+                            <br>
+                            <button class="btn btn-default" (click)="submitted=false;active=true;">Edit</button>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
