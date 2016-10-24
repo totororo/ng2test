@@ -2,6 +2,7 @@ import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import { PushNotificationsModule } from 'angular2-notifications'
 import { AngularFireModule } from 'angularfire2';
 
@@ -20,6 +21,7 @@ export const firebaseConfig = {
 @NgModule({
     imports: [
         CommonModule,
+        HttpModule,
         FormsModule,
         BrowserModule,
         PushNotificationsModule,

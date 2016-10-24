@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseListObservable } from 'angularfire2';
 
+import { BaseComponent } from '../base-component';
 import { LoginService } from '../service/login.service';
 import { UserService } from '../service/user.service';
 import { User } from '../object/user.object';
@@ -20,7 +21,7 @@ const GITHUB = 5;
     styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent extends BaseComponent implements OnInit, OnDestroy {
 
     titleMessage = undefined;
     userId = undefined;
@@ -36,16 +37,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     // test
     userItems: Array<User>;
 
+    public disabled: boolean = false;
+    public status: { isopen: boolean } = { isopen: false };
+
     constructor(private loginService: LoginService,
         private userService: UserService,
-        private appService: AppService,
         private route: ActivatedRoute,
-        private router: Router) {
-
+        private router: Router,
+        public appService: AppService, ) {
+        super(appService);
     }
 
     ngOnInit() {
-        this.titleMessage = "Please Sign In";
 
         this.userProfileSubscribe = this.userService.getUserProfiles().subscribe(obj => {
             this.userItems = obj;
@@ -172,4 +175,15 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.routeDataSubscribe.unsubscribe();
         }
     }
+
+
+public toggled(open: boolean): void {
+    console.log('Dropdown is now: ', open);
+  }
+
+  public toggleDropdown($event: MouseEvent): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.status.isopen = !this.status.isopen;
+  }
 }

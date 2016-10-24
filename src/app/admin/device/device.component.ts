@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppService } from '../../app.service';
 import { DeviceService } from '../../service/device.service';
@@ -9,17 +10,17 @@ import { Device } from '../../object/device.object';
 })
 
 export class DeviceComponent {
-
+    @ViewChild('childModal') public childModal: ModalDirective;
     isNew = false;
     isList = true;
     isDetail = false;
 
     deviceItems: Array<any> = [];
     deviceItem: Device = {
-        uid: "",
-        device_id: "",
-        device_description: "",
-        device_token: "",
+        uid: "uid",
+        device_id: "did",
+        device_description: "description",
+        device_token: "token",
         register_date: 0,
         public_yn: false
     } as Device;
@@ -30,7 +31,10 @@ export class DeviceComponent {
         private deviceService: DeviceService,
         private appService: AppService) {
         this.showStatus('list');
-
+        // test
+        this.deviceItems.push(this.deviceItem);
+        this.deviceItems.push(this.deviceItem);
+        this.deviceItems.push(this.deviceItem);
     }
 
     showStatus(status) {
@@ -39,7 +43,7 @@ export class DeviceComponent {
                 this.isNew = true;
                 this.isList = false;
                 this.isDetail = false;
-                this.deviceItem.device_id = Date.now() + this.appService.user.uid;
+                this.deviceItem.device_id = this.deviceService.randomToken();
                 break;
             case 'list':
                 this.isNew = false;
@@ -74,5 +78,13 @@ export class DeviceComponent {
     onChange(event) {
         this.uploadFile = event.target.files[0];
         console.log(this.uploadFile);
+    }
+
+    public showChildModal(): void {
+        this.childModal.show();
+    }
+
+    public hideChildModal(): void {
+        this.childModal.hide();
     }
 }
