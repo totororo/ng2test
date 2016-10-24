@@ -19,7 +19,10 @@ export class AppService {
     constructor(private http: Http) {
         console.log(" === APP SERVICE === Version:" + this.version);
     }
-
+    /**
+     *  Load Language 
+     *  @param language (en,cn,ja,kr)
+     */
     loadLang(lang: string) {
         return this.http.get(LANG_URL + lang + ".json")
             .map(response => {
