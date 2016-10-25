@@ -7,7 +7,7 @@
                 <div class="panel-heading clearfix">
                     <h4 class="panel-title pull-left" style="padding-top: 7.5px;">My Device</h4>
                     <div class="btn-group pull-right">
-                        <a href="#" class="btn btn-angular btn-sm"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
+                        <a (click)="lgModal.show();" class="btn btn-angular btn-sm"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
                     </div>
                 </div>
                 <!-- /.panel-heading -->
@@ -17,8 +17,8 @@
                             <tr>
                                 <th style="width:10%;">STATUS</th>
                                 <th>Name /Description</th>
-                                <th>Sensor</th>
-                                <th>Trigger</th>
+                                <th>Sensor / Trigger</th>
+                                <th>Message</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -27,8 +27,12 @@
                                 <td style="text-align: center;"><i class="fa fa-cog fa-spin" style="font-size:24px;color:green;"></i>
                                     <p><a href="#">STATUS</a></p>
                                 </td>
-                                <td>{{ d.device_id }}</td>
-                                <td>{{ d.display_name }}</td>
+                                <td><p>{{ d.display_name }}</p><small>{{ d.device_description }}</small></td>
+                                <td>
+                                    <ul *ngFor="let s of sensorItems">
+                                        <li>{{ s.sensor_name }} - {{ s.sensor_trigger }}</li>
+                                    </ul>
+                                </td>
                                 <td>{{ d.description }}</td>
                                 <td class="center">{{ d.register_date | date:'Y-m-d H:i:s' }}</td>
                             </tr>
@@ -56,7 +60,7 @@
                     <div class="panel panel-angular">
                         <div class="panel-body">
 
-                            <div class="col-lg-6" *ngIf="step == 1" id="step1">
+                            <div  *ngIf="step == 1" id="step1">
                                 <div class="form-group">
                                     <label>Device Name</label>
                                     <input type="text" class="form-control" [(ngModel)]="deviceItem.display_name" placeholder="Enter device name" required>
@@ -84,7 +88,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6" *ngIf="step == 2" id="step2">
+                            <div *ngIf="step == 2" id="step2">
                                 <div class="form-group">
                                     <label>Sensor</label>
                                     <select [(ngModel)]="deviceType" class="form-control">
@@ -141,7 +145,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6" *ngIf="step == 3" id="step3">
+                            <div *ngIf="step == 3" id="step3">
                                 <div class="form-group">
                                     <label>Device ID</label>
                                     <p class="help-block">{{ deviceItem.device_id}}</p>
@@ -176,10 +180,10 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6" *ngIf="step == 4" id="step4">
+                            <div *ngIf="step == 4" id="step4">
                                 <div class="form-group">
                                     <label>Code Sample </label>
-                                    <textarea cols="100" rows="18">
+                                    <textarea cols="80%" rows="18">
                                     </textarea>
                                     <p class="help-block">Example block-level help text here.</p>
                                 </div>

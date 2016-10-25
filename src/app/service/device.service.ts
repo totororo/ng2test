@@ -66,6 +66,14 @@ export class DeviceService {
         });
     }
 
+    getUserDeviceAllSensor(uid: string): FirebaseListObservable<any> {
+        return this.angularFire.database.list("/iot/sensor/" + uid, {
+            query: {
+                orderByChild: 'device_id'
+            }
+        });
+    }
+
     getUserDeviceSensor(uid: string): FirebaseListObservable<any> {
         return this.angularFire.database.list("/iot/sensor/" + uid, {
             query: {
@@ -80,7 +88,7 @@ export class DeviceService {
     }
 
     addSensor(sensor: Sensor) {
-        return this.getUserDeviceSensor(sensor.uid).push(sensor);
+        return this.getUserDeviceAllSensor(sensor.uid).push(sensor);
     }
 
     findDeviceById(device_id): void {

@@ -14,7 +14,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     step = 1;
     deviceItems: Array<Device> = [];
-
+    sensorItems: Array<Sensor> = [];
     deviceItem: Device = {
         uid: this.appService.user.uid,
         device_id: this.deviceService.randomToken(),
@@ -37,7 +37,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     uploadFile;
     deviceSubscribe;
-
+    sensorSubscribe;
     constructor(
         private deviceService: DeviceService,
         private appService: AppService) {
@@ -47,6 +47,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.deviceSubscribe = this.deviceService.getUserAllDevices(this.appService.user.uid).subscribe(result => {
             this.deviceItems = result;
+        });
+
+        this.sensorSubscribe = this.deviceService.getUserDeviceAllSensor(this.appService.user.uid).subscribe(result =>{ 
+            this.sensorItems = result;
         });
     }
 
