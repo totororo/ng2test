@@ -1,5 +1,7 @@
 {
     "please_login": "로그인 화면",
     "login": "로그인",
-    "user_id": "유저아이디"
+    "user_id": "유저아이디",
+    "logout": "로그아웃",
+    "dashboard": "대시보드"
 }

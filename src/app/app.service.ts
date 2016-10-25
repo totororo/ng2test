@@ -20,16 +20,15 @@ export class AppService {
         console.log(" === APP SERVICE === Version:" + this.version);
     }
     /**
-     *  Load Language 
+     *  Load Language
      *  @param language (en,cn,ja,kr)
      */
     loadLang(lang: string) {
         return this.http.get(LANG_URL + lang + ".json")
             .map(response => {
                 let body = response.json();
-                console.log(body);
                 return body || {};
-            }) // {result:OK | NG}
+            })
             .catch(this.handleError);
     }
 

@@ -1,7 +1,7 @@
 {
-    "please_login": "ログインしてください。",
-    "login": "ログイン",
-    "user_id": "ユーザーID",
-    "logout": "ログアウト",
-    "dashboard": "ダッシュボード"
+    "please_login": "Please Sign In",
+    "login": "LOGIN",
+    "user_id": "User ID",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
 }

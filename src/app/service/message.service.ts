@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFire, FirebaseAuthState, FirebaseListObservable } from 'angularfire2';
 import { Subject } from 'rxjs/Subject';
-import { Message } from '../object/message.object';
+
 
 @Injectable()
 export class MessageService {

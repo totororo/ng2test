@@ -1,65 +1,68 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppService } from '../../app.service';
 import { DeviceService } from '../../service/device.service';
-import { Device } from '../../object/device.object';
+import { Device, DeviceType, Sensor, SensorType, TriggerType } from '../../object/device.object';
 
 @Component({
     templateUrl: './device.component.html',
 })
 
-export class DeviceComponent {
+export class DeviceComponent implements OnInit, OnDestroy {
     @ViewChild('childModal') public childModal: ModalDirective;
-    isNew = false;
-    isList = true;
-    isDetail = false;
 
-    deviceItems: Array<any> = [];
+    step = 1;
+    deviceItems: Array<Device> = [];
+
     deviceItem: Device = {
-        uid: "uid",
-        device_id: "did",
-        device_description: "description",
-        device_token: "token",
-        register_date: 0,
+        uid: this.appService.user.uid,
+        device_id: this.deviceService.randomToken(),
+        display_name: "",
+        device_description: "",
+        device_type: DeviceType.Arduino,
+        register_date: -1,
         public_yn: false
     } as Device;
 
+    sensorItem: Sensor = {
+        uid: this.appService.user.uid,
+        device_id: this.deviceItem.device_id,
+        sensor_id: this.deviceService.randomToken(),
+        sensor_name: "",
+        sensor_type: SensorType.Receive,
+        sensor_trigger: TriggerType.PushNotification,
+        sensor_controller_command: ""
+    } as Sensor;
+
     uploadFile;
+    deviceSubscribe;
 
     constructor(
         private deviceService: DeviceService,
         private appService: AppService) {
-        this.showStatus('list');
-        // test
-        this.deviceItems.push(this.deviceItem);
-        this.deviceItems.push(this.deviceItem);
-        this.deviceItems.push(this.deviceItem);
+
     }
 
-    showStatus(status) {
-        switch (status) {
-            case 'new':
-                this.isNew = true;
-                this.isList = false;
-                this.isDetail = false;
-                this.deviceItem.device_id = this.deviceService.randomToken();
-                break;
-            case 'list':
-                this.isNew = false;
-                this.isList = true;
-                this.isDetail = false;
-                break;
-            case 'detail':
-                this.isNew = false;
-                this.isList = false;
-                this.isDetail = true;
-                break;
-        }
+    ngOnInit() {
+        this.deviceSubscribe = this.deviceService.getUserAllDevices(this.appService.user.uid).subscribe(result => {
+            this.deviceItems = result;
+        });
     }
 
-    saveDevice() {
-        this.showStatus('list');
+    setStep(step: number) {
+        this.step = step;
+    }
+
+    saveData(): void {
+        this.setStep(4);
+        this.deviceService.addDevice(this.deviceItem).catch(error => {
+            console.log(error);
+        });
+        this.deviceService.addSensor(this.sensorItem).catch(error => {
+            console.log(error);
+        });
+
     }
 
     upload() {
@@ -80,11 +83,10 @@ export class DeviceComponent {
         console.log(this.uploadFile);
     }
 
-    public showChildModal(): void {
-        this.childModal.show();
+    ngOnDestroy() {
+        if (this.deviceSubscribe) {
+            this.deviceSubscribe.unsubscribe();
+        }
     }
 
-    public hideChildModal(): void {
-        this.childModal.hide();
-    }
 }

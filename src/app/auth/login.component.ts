@@ -177,13 +177,13 @@ export class LoginComponent extends BaseComponent implements OnInit, OnDestroy {
     }
 
 
-public toggled(open: boolean): void {
-    console.log('Dropdown is now: ', open);
-  }
+    public toggled(open: boolean): void {
+        console.log('Dropdown is now: ', open);
+    }
 
-  public toggleDropdown($event: MouseEvent): void {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.status.isopen = !this.status.isopen;
-  }
+    public toggleDropdown($event: MouseEvent): void {
+        $event.preventDefault();
+        $event.stopPropagation();
+        this.status.isopen = !this.status.isopen;
+    }
 }

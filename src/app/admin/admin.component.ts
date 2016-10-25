@@ -9,7 +9,7 @@ import { AppService } from '../app.service';
 })
 export class AdminComponent extends BaseComponent implements OnInit {
 
-  constructor(public appService:AppService) {
+  constructor(public appService: AppService) {
     super(appService);
   }
 

@@ -2,61 +2,99 @@ import { Injectable } from '@angular/core';
 import { AngularFire, FirebaseAuthState, FirebaseListObservable } from 'angularfire2';
 import { Subject } from 'rxjs/Subject';
 
-import { Device } from '../object/device.object';
+import { Device, Sensor } from '../object/device.object';
+
+/**
+ * Firebase Database
+ *
+    IOT -
+        - device
+            - uid
+                - device_id
+                - display_name
+                - device_description
+                - device_type
+                - register_date
+                - public_yn
+
+        - sensor
+            - uid
+                $device_id
+                    - $key
+                        - device_id
+                        - sensor_id
+                        - sensor_name
+                        - sendor_type
+                        - sensor_trigger
+                        - sensor_controller_command
+
+        - support_device_list
+            - $key
+                - name
+
+        - support_sensor_list
+            - $key
+                - name
+
+*/
 
 @Injectable()
 export class DeviceService {
 
     deviceSubject = new Subject();
+    sensorSubject = new Subject();
     infoSubject = new Subject();
 
     constructor(private angularFire: AngularFire) {
+
     }
 
-    getUserDevices(): FirebaseListObservable<any> {
-        return this.angularFire.database.list("/iot/device/", {
+    getUserAllDevices(uid: string): FirebaseListObservable<any> {
+        return this.angularFire.database.list("/iot/device/" + uid, {
             query: {
-                orderByChild: 'uid',
+                orderByChild: "device_id",
+            }
+        });
+    }
+
+    getUserDevices(uid: string, deviceId: string): FirebaseListObservable<any> {
+        return this.angularFire.database.list("/iot/device/" + uid, {
+            query: {
+                orderByChild: "device_id",
                 equalTo: this.deviceSubject
             }
         });
     }
 
-    getUserDeviceInfo(uid: string): FirebaseListObservable<any> {
-        return this.angularFire.database.list("/iot/device/" + uid, {
+    getUserDeviceSensor(uid: string): FirebaseListObservable<any> {
+        return this.angularFire.database.list("/iot/sensor/" + uid, {
             query: {
                 orderByChild: 'device_id',
-                equalTo: this.infoSubject
+                equalTo: this.sensorSubject
             }
         });
     }
 
     addDevice(device: Device) {
-        return this.getUserDevices().push(device);
+        return this.getUserAllDevices(device.uid).push(device);
     }
 
-    findDeviceByUid(uid): void {
-        this.deviceSubject.next(uid);
+    addSensor(sensor: Sensor) {
+        return this.getUserDeviceSensor(sensor.uid).push(sensor);
     }
 
-    findDeviceInfo(deviceId): void {
-        this.infoSubject.next(deviceId);
+    findDeviceById(device_id): void {
+        this.deviceSubject.next(device_id);
     }
 
-    saveDevice(userId, content: Device) {
+    saveDevice(uid: string, key: string, device: Device) {
         let timestamp = new Date().getTime();
-        let itemObservable = this.angularFire.database.object('/iot/device/' + userId + '/');
-        return itemObservable.set({
-            device_id: content.device_id,
-            register_date: timestamp,
-            device_token: content.device_token,
-            device_description: content.device_description,
-            public_yn: content.public_yn
-        });
+        let itemObservable = this.angularFire.database.object('/iot/device/' + uid + '/' + key);
+        return itemObservable.set(device);
     }
 
-    deleteDevice(key) {
-        this.getUserDevices().remove(key);
+    deleteDevice(uid: string, key: string) {
+        return this.getUserAllDevices(uid).remove(key);
     }
 
     fileUpload(file) {
