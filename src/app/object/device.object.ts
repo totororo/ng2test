@@ -8,15 +8,14 @@
                 - device_type
                 - register_date
                 - public_yn
-
-        - sendor
-            - uid
-                - device_id
+                - sendor
                     - sensor_id
                     - sensor_name
                     - sendor_type
                     - sensor_trigger
                     - sensor_controller_command
+
+
 
         - sensor_data // 端末から受信データー
                 - device_id
@@ -77,7 +76,7 @@ gpio.open(pin, "input", function(err) {
 */
 
 
-export interface Device {
+export class Device {
     uid: string;
     device_id: string;
     display_name?: string;
@@ -85,16 +84,24 @@ export interface Device {
     device_type: DeviceType;
     register_date?: number;
     public_yn: boolean;
+    sensors: Sensor[];
+
+    public static clone(device: Device): Device {
+            delete device['$key'];
+    delete device['$exists'];
+        return device;
+    }
 }
 
 export interface Sensor {
-    uid: string;
-    device_id: string;
     sensor_id: string;
     sensor_name: string;
-    sensor_type: SensorType;
-    sensor_trigger: TriggerType;
-    sensor_controller_command: string;
+    sensor_type: SensorType; // send, receive
+    command_type: CommandType; // trigger ,control
+    trigger_name: TriggerType; // sendmail ,push
+    trigger_conditional: ConditionalType; // > = <
+    trigger_conditional_value: number;
+    control_command: string;
 }
 
 export const enum DeviceType {
@@ -108,7 +115,18 @@ export const enum SensorType {
     Receive = 2,
 }
 
+export const enum CommandType {
+    Trigger = 1,
+    Control = 2
+}
+
 export const enum TriggerType {
     SendMail = 1,
     PushNotification = 2,
+}
+
+export const enum ConditionalType {
+    Ooki = 1,
+    Equal = 2,
+    Tisai = 3
 }

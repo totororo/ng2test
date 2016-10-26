@@ -7,7 +7,7 @@
                 <div class="panel-heading clearfix">
                     <h4 class="panel-title pull-left" style="padding-top: 7.5px;">My Device</h4>
                     <div class="btn-group pull-right">
-                        <a (click)="lgModal.show();" class="btn btn-angular btn-sm"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
+                        <a (click)="newDeviceModal.show();" class="btn btn-angular btn-sm"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
                     </div>
                 </div>
                 <!-- /.panel-heading -->
@@ -27,18 +27,21 @@
                                 <td style="text-align: center;"><i class="fa fa-cog fa-spin" style="font-size:24px;color:green;"></i>
                                     <p><a href="#">STATUS</a></p>
                                 </td>
-                                <td><p>{{ d.display_name }}</p><small>{{ d.device_description }}</small></td>
                                 <td>
-                                    <ul *ngFor="let s of sensorItems">
-                                        <li>{{ s.sensor_name }} - {{ s.sensor_trigger }}</li>
+                                    <p style="cursor: pointer;" (click)="editDevice(d.device_id);newDeviceModal.show();">{{ d.display_name }}</p>
+                                    <small>{{ d.device_description }}</small>
+                                </td>
+                                <td>
+                                    <ul *ngFor="let s of d.sensors">
+                                        <li>{{ s.sensor_name }} - {{ s.command_type }}</li>
                                     </ul>
                                 </td>
                                 <td>{{ d.description }}</td>
-                                <td class="center">{{ d.register_date | date:'Y-m-d H:i:s' }}</td>
+                                <td class="center">{{ d.register_date | date:'yyyy-mm-dd H:m:s' }}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <a (click)="lgModal.show();" class="btn btn-angular"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
+                    <a (click)="newDeviceModal.show();" class="btn btn-angular"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -49,18 +52,18 @@
     <!-- Device List -->
 
     <!-- Device Register -->
-    <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div bsModal #newDeviceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" (click)="lgModal.hide()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">New Device </h4>
+                    <button type="button" class="close" (click)="newDeviceModal.hide(); step = 1;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> Device Info </h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel panel-angular">
                         <div class="panel-body">
 
-                            <div  *ngIf="step == 1" id="step1">
+                            <div *ngIf="step == 1" id="step1">
                                 <div class="form-group">
                                     <label>Device Name</label>
                                     <input type="text" class="form-control" [(ngModel)]="deviceItem.display_name" placeholder="Enter device name" required>
@@ -84,21 +87,11 @@
                                 </div>
                                 <div class="form-group">
                                     <a (click)="setStep(2);" class="btn btn-angular" style="float:right;margin-bottom:10px"> Next </a>
-                                    <a (click)="lgModal.hide();" class="btn btn-angular" style="float:right;margin-right:10px;margin-bottom:10px;">Cancel </a>
+                                    <a (click)="newDeviceModal.hide();" class="btn btn-angular" style="float:right;margin-right:10px;margin-bottom:10px;">Cancel </a>
                                 </div>
                             </div>
 
                             <div *ngIf="step == 2" id="step2">
-                                <div class="form-group">
-                                    <label>Sensor</label>
-                                    <select [(ngModel)]="deviceType" class="form-control">
-                                        <option value="0">Raspberry Pi</option>
-                                        <option value="1">Anduino</option>
-                                        <option value="-1">Other</option>
-                                    </select>
-                                    <p class="help-block">Example block-level help text here.</p>
-                                </div>
-
                                 <div class="form-group">
                                     <label>Sensor Name</label>
                                     <input type="text" class="form-control" [(ngModel)]="sensorItem.sensor_name" placeholder="Enter device name" required>
@@ -106,16 +99,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Sensor</label>
-                                    <select [(ngModel)]="sensorItem.sensor_id" class="form-control">
-                                        <option value="1">Sensor1</option>
-                                        <option value="2">Sensor2</option>
-                                    </select>
-                                    <p class="help-block">Example block-level help text here.</p>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Send Receive</label>
+                                    <label>Send / Receive</label>
                                     <select [(ngModel)]="sensorItem.sensor_type" class="form-control">
                                         <option value="0">SEND</option>
                                         <option value="1">RECEIVE</option>
@@ -124,19 +108,50 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Trigger or Controller</label>
-                                    <select [(ngModel)]="sensorItem.sensor_trigger" class="form-control">
-                                        <option value="1">Send Mail</option>
-                                        <option value="2">Push Notification</option>
-                                        <option value="3">Controller</option>
+                                    <label>Sensor Command</label>
+                                    <select [(ngModel)]="sensorItem.command_type" class="form-control">
+                                        <option value="1">Trigger </option>
+                                        <option value="2">Controle </option>
                                     </select>
                                     <p class="help-block">Example block-level help text here.</p>
                                 </div>
+                                <!--  TRIGGER -->
+                                <div *ngIf="sensorItem.command_type == 1">
+                                    <div class="form-group">
+                                        <label>Trigger Name</label>
+                                        <select [(ngModel)]="sensorItem.trigger_name" class="form-control">
+                                            <option value="1">Send Mail</option>
+                                            <option value="2">Push Notification</option>
+                                        </select>
+                                        <p class="help-block">Example block-level help text here.</p>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label>Controller Command</label>
-                                    <input type="text" class="form-control" [(ngModel)]="sensorItem.sensor_controller_command" placeholder="Enter device name" required>
-                                    <p class="help-block">Example block-level help text here.</p>
+                                    <div class="form-group">
+                                        <label>Trigger Name</label>
+                                        <select [(ngModel)]="sensorItem.trigger_conditional" class="form-control">
+                                            <option value="1">Send Mail</option>
+                                            <option value="2">Push Notification</option>
+                                        </select>
+                                        <p class="help-block">Example block-level help text here.</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Trigger Name</label>
+                                        <select [(ngModel)]="sensorItem.trigger_conditional" class="form-control">
+                                            <option value="1">Send Mail</option>
+                                            <option value="2">Push Notification</option>
+                                        </select>
+                                        <p class="help-block">Example block-level help text here.</p>
+                                    </div>
+                                </div>
+
+                                <!--  CONTROL -->
+                                <div *ngIf="sensorItem.command_type == 2">
+                                    <div class="form-group">
+                                        <label>Controller Command</label>
+                                        <input type="text" class="form-control" [(ngModel)]="sensorItem.control_command" placeholder="Enter device name" required>
+                                        <p class="help-block">Example block-level help text here.</p>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -175,7 +190,8 @@
                                     <p class="help-block">{{ sensorItem.sensor_controller_command }}</p>
                                 </div>
                                 <div class="form-group">
-                                    <a (click)="saveData();" class="btn btn-angular" style="float:right;margin-bottom:10px"> Save </a>
+                                    <a *ngIf="deviceItem.$key" (click)="updateData(deviceItem.$key);" class="btn btn-angular" style="float:right;margin-bottom:10px"> Update </a>
+                                    <a *ngIf="!deviceItem.$key" (click)="saveData();" class="btn btn-angular" style="float:right;margin-bottom:10px"> Save </a>
                                     <a (click)="setStep(2);" class="btn btn-angular" style="float:right;margin-right:10px;margin-bottom:10px;">Back </a>
                                 </div>
                             </div>
@@ -188,10 +204,9 @@
                                     <p class="help-block">Example block-level help text here.</p>
                                 </div>
                                 <div class="form-group">
-                                    <a (click)="lgModal.hide();" class="btn btn-angular" style="float:right;margin-bottom:10px"> OK </a>
+                                    <a (click)="newDeviceModal.hide(); step = 1;" class="btn btn-angular" style="float:right;margin-bottom:10px"> OK </a>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -199,6 +214,5 @@
         </div>
     </div>
     <!-- Device Register -->
-
 </div>
 <!-- /#page-wrapper -->

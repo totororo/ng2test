@@ -3,7 +3,7 @@ import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppService } from '../../app.service';
 import { DeviceService } from '../../service/device.service';
-import { Device, DeviceType, Sensor, SensorType, TriggerType } from '../../object/device.object';
+import { Device, DeviceType, Sensor, SensorType, CommandType, TriggerType, ConditionalType } from '../../object/device.object';
 
 @Component({
     templateUrl: './device.component.html',
@@ -15,29 +15,33 @@ export class DeviceComponent implements OnInit, OnDestroy {
     step = 1;
     deviceItems: Array<Device> = [];
     sensorItems: Array<Sensor> = [];
+
     deviceItem: Device = {
         uid: this.appService.user.uid,
-        device_id: this.deviceService.randomToken(),
+        device_id: AppService.randomToken(16),
         display_name: "",
         device_description: "",
         device_type: DeviceType.Arduino,
-        register_date: -1,
-        public_yn: false
+        register_date: Date.now(),
+        public_yn: false,
+        sensors: []
     } as Device;
 
     sensorItem: Sensor = {
-        uid: this.appService.user.uid,
-        device_id: this.deviceItem.device_id,
-        sensor_id: this.deviceService.randomToken(),
+        sensor_id: AppService.randomToken(6),
         sensor_name: "",
         sensor_type: SensorType.Receive,
-        sensor_trigger: TriggerType.PushNotification,
-        sensor_controller_command: ""
+        command_type: CommandType.Trigger,
+        trigger_name: TriggerType.PushNotification,
+        trigger_conditional: ConditionalType.Equal,
+        trigger_conditional_value: 0,
+        control_command: ""
     } as Sensor;
 
-    uploadFile;
     deviceSubscribe;
-    sensorSubscribe;
+
+    itemsObj;
+
     constructor(
         private deviceService: DeviceService,
         private appService: AppService) {
@@ -45,12 +49,9 @@ export class DeviceComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.deviceSubscribe = this.deviceService.getUserAllDevices(this.appService.user.uid).subscribe(result => {
+        this.itemsObj = this.deviceService.getUserAllDevices(this.appService.user.uid);
+        this.deviceSubscribe = this.itemsObj.subscribe(result => {
             this.deviceItems = result;
-        });
-
-        this.sensorSubscribe = this.deviceService.getUserDeviceAllSensor(this.appService.user.uid).subscribe(result =>{ 
-            this.sensorItems = result;
         });
     }
 
@@ -60,31 +61,37 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
     saveData(): void {
         this.setStep(4);
+        this.deviceItem.sensors = [this.sensorItem];
+        this.deviceItem.register_date = Date.now();
         this.deviceService.addDevice(this.deviceItem).catch(error => {
             console.log(error);
         });
-        this.deviceService.addSensor(this.sensorItem).catch(error => {
-            console.log(error);
-        });
-
     }
 
-    upload() {
-
-        let re = this.deviceService.fileUpload(this.uploadFile);
-        re.on('state_changed', snapshot => {
-            console.log(snapshot);
-        }, error => {
-            console.log(error);
-        }, () => {
-            console.log(re.snapshot.downloadURL);
+    updateData(key) {
+        let newSensors = [];
+        this.deviceItem.sensors.forEach(s => {
+            if (this.sensorItem.sensor_id == s.sensor_id) {
+                newSensors.push(this.sensorItem);
+            } else {
+                newSensors.push(s);
+            }
         });
 
+        this.deviceItem.sensors = newSensors;
+        this.deviceItem.register_date = Date.now();
+        this.itemsObj.update(key, Device.clone(this.deviceItem));
+        this.setStep(4);
     }
 
-    onChange(event) {
-        this.uploadFile = event.target.files[0];
-        console.log(this.uploadFile);
+    editDevice(deviceId) {
+        this.deviceItems.forEach(obj => {
+            if (obj.device_id == deviceId) {
+                this.deviceItem = obj;
+                if (this.deviceItem.sensors.length > 0)
+                    this.sensorItem = this.deviceItem.sensors[0];
+            }
+        });
     }
 
     ngOnDestroy() {

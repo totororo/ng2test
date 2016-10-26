@@ -25,8 +25,8 @@ export class LoginComponent extends BaseComponent implements OnInit, OnDestroy {
 
     titleMessage = undefined;
     userId = undefined;
-    displayName = undefined;
-    photoURL = undefined;
+    //displayName = undefined;
+    //photoURL = undefined;
 
     email = "demo@demo.com";
     password = "demodemo";
@@ -120,21 +120,8 @@ export class LoginComponent extends BaseComponent implements OnInit, OnDestroy {
     setData(user) {
         this.titleMessage = "Login Success.";
         this.userId = user.uid;
-        this.displayName = user.auth.displayName;
-        this.photoURL = user.auth.photoURL;
-
-        /** test  */
-        this.userService.saveUserProfile(user).then(obj => {
-            //console.log("save user profile :" + obj);
-        }).catch(error => {
-            this.errorHandler(error);
-        })
-
         this.appService.user = user;
-
-
         this.router.navigate(['admin']);
-
     }
 
     logout() {
