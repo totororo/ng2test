@@ -10,7 +10,7 @@
     <!-- /.navbar-top-links -->
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-profile">
-            <img  (click)="profileModal.show();" class="img-circle" src="{{ userProfile.photo_url }}" style="width:60px;height:60px;cursor: pointer;">
+            <img (click)="profileModal.show();" class="img-circle" src="{{ userProfile.photo_url }}" style="width:60px;height:60px;cursor: pointer;">
             <span style="cursor: pointer;" (click)="profileModal.show();">{{ userProfile.display_name }}</span>
         </div>
         <div class="sidebar-nav navbar-collapse">

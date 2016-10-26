@@ -87,8 +87,8 @@ export class Device {
     sensors: Sensor[];
 
     public static clone(device: Device): Device {
-            delete device['$key'];
-    delete device['$exists'];
+        delete device['$key'];
+        delete device['$exists'];
         return device;
     }
 }
