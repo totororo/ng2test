@@ -94,6 +94,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     }
 
     editDevice(deviceId) {
+        this.resetData();
         this.deviceItems.forEach(obj => {
             if (obj.device_id == deviceId) {
                 this.display_name = obj.display_name;
