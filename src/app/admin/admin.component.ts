@@ -10,6 +10,7 @@ import { User } from '../object/user.object';
   templateUrl: './admin.component.html'
 })
 export class AdminComponent extends BaseComponent implements OnInit {
+public isCollapsed: boolean = true;
 
   userProfile: User = {
     uid: "",
@@ -17,6 +18,8 @@ export class AdminComponent extends BaseComponent implements OnInit {
     photo_url: "",
     lang: "ja"
   };
+
+  activeDevicePage: boolean = false;
 
   userProfileImageFile;
   fileName: string;

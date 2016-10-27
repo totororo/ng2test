@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { Router, RouterOutlet } from "@angular/router";
 import { ModalModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { CollapseDirective } from 'ng2-bootstrap'
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { DeviceModule } from './device/device.module';
@@ -24,7 +25,7 @@ import { MessageService } from '../service/message.service';
     ADMIN_ROUTES,
 
   ],
-  declarations: [AdminComponent],
+  declarations: [AdminComponent, CollapseDirective],
   providers: [DeviceService, UserService, MessageService]
 })
 

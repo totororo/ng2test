@@ -1,24 +1,28 @@
-<!-- /.navbar-header -->
-<nav class="navbar  navbar-static-top" role="navigation" style="background-color:#1187df;margin-bottom: 0">
-    <div class="navbar-header">
-        <a class="navbar-brand" style="color:#ffffff;" routerLink="/admin">Admin</a>
-    </div>
-    <div class="nav navbar-top-links navbar-right" style="margin-top:8px;">
-        <!-- Single button -->
-        <div class="btn-group" dropdown [(isOpen)]="status.isopen">
-            <button id="single-button" type="button" class="btn btn-primary" dropdownToggle [disabled]="disabled">
+<nav class="navbar navbar-fixed-top navbar-light bg-faded">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">HOME</a>
+            <a class="navbar-toggle collapsed" (click)="isCollapsed = !isCollapsed">
+                <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </a>
+        </div>
+
+        <div class="nav navbar-top-links navbar-right" style="margin-top:8px;">
+            <!-- Single button -->
+            <div class="btn-group" dropdown [(isOpen)]="status.isopen">
+                <button id="single-button" type="button" class="btn btn-primary" dropdownToggle [disabled]="disabled">
       Language <span class="caret"></span>
     </button>
-            <ul dropdownMenu role="menu" aria-labelledby="single-button">
-                <li role="menuitem"><a class="dropdown-item" (click)="changeLang('ja')">日本語</a></li>
-                <li role="menuitem"><a class="dropdown-item" (click)="changeLang('en')">English</a></li>
-                <li role="menuitem"><a class="dropdown-item" (click)="changeLang('cn')">中国語</a></li>
-                <li role="menuitem"><a class="dropdown-item" (click)="changeLang('ko')">韓国語</a></li>
-            </ul>
+                <ul dropdownMenu role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('ja')">日本語</a></li>
+                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('en')">English</a></li>
+                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('cn')">中国語</a></li>
+                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('ko')">韓国語</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
-
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
