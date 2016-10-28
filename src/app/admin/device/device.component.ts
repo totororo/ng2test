@@ -15,6 +15,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
     step: number;
     deviceItems: Array<Device> = [];
     sensorItems: Array<Sensor> = [];
+    public isCollapsed: boolean = true;
 
     deviceItem: Device;
     sensorItem: Sensor

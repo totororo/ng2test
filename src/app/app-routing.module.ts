@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './auth/login.component';
-
+import { AppComponent } from './app.component';
 
 
 const webRoutes: Routes = [

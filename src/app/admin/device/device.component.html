@@ -1,232 +1,268 @@
-<div id="page-wrapper">
-    <!-- Device List -->
-    <!-- /.row -->
+<div class="col-md-2 sidebar">
     <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-angular">
-                <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;">My Device</h4>
-                    <div class="btn-group pull-right">
-                        <a (click)="editDevice();" class="btn btn-angular btn-sm"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
-                    </div>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <table width="100%" class="table hover">
-                        <thead>
-                            <tr>
-                                <th style="width:10%;">STATUS</th>
-                                <th>Name /Description</th>
-                                <th>Sensor / Trigger</th>
-                                <th>Message</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="odd gradeX" *ngFor="let d of deviceItems">
-                                <td style="text-align: center;"><i class="fa fa-cog fa-spin" style="font-size:24px;color:green;"></i>
-                                    <p><a href="#">STATUS</a></p>
-                                </td>
-                                <td>
-                                    <p style="cursor: pointer;" (click)="editDevice(d.device_id);">{{ d.display_name }}</p>
-                                    <small>{{ d.device_description }}</small>
-                                </td>
-                                <td>
-                                    <ul *ngFor="let s of d.sensors">
-                                        <li>{{ s.sensor_name }} - {{ s.command_type }}</li>
+        <!-- uncomment code for absolute positioning tweek see top comment in css -->
+        <div class="absolute-wrapper"></div>
+        <!-- Menu -->
+        <div class="side-menu">
+            <nav class="navbar navbar-default" role="navigation">
+                <!-- Main Menu -->
+                <div class="side-menu-container">
+                    <ul class="nav navbar-nav">
+                        <li routerLinkActive="active"><a routerLink="/admin/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+                        <li routerLinkActive="active"><a routerLink="/admin/device"><span class="glyphicon glyphicon-plane"></span> Active Link</a></li>
+                        <li routerLinkActive="active"><a routerLink="/admin/device2"><span class="glyphicon glyphicon-cloud"></span> Link</a></li>
+
+                        <!-- Dropdown-->
+                        <li class="panel panel-default" id="dropdown">
+                            <a style="cursor:pointer;" (click)="isCollapsed = !isCollapsed">
+                                <span class="glyphicon glyphicon-user"></span> Sub Level <span class="caret"></span>
+                            </a>
+
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-lvl1" class="panel-collapse collapse" [collapse]="isCollapsed">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li><a href="#">Link</a></li>
+                                        <li><a href="#">Link</a></li>
+                                        <li><a href="#">Link</a></li>
+
+                                        <!-- Dropdown level 2 -->
+                                        <li class="panel panel-default" id="dropdown">
+                                            <a data-toggle="collapse" href="#dropdown-lvl2">
+                                                <span class="glyphicon glyphicon-off"></span> Sub Level <span class="caret"></span>
+                                            </a>
+                                            <div id="dropdown-lvl2" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <ul class="nav navbar-nav">
+                                                        <li><a href="#">Link</a></li>
+                                                        <li><a href="#">Link</a></li>
+                                                        <li><a href="#">Link</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
                                     </ul>
-                                </td>
-                                <td>{{ d.description }}</td>
-                                <td class="center">{{ d.register_date | date:'yyyy-mm-dd H:m:s' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <a (click)="editDevice();" class="btn btn-angular"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="#"><span class="glyphicon glyphicon-signal"></span> Link</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-signal"></span> Link</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-signal"></span> Link</a></li>
+                    </ul>
                 </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
+                <!-- /.navbar-collapse -->
+            </nav>
         </div>
-        <!-- /.col-lg-12 -->
     </div>
-    <!-- Device List -->
+</div>
 
-    <!-- Device Register -->
-    <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" (click)="hideChildModal();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"> Device Info </h4>
-                </div>
-                <div class="modal-body">
-                    <div class="panel panel-angular">
-                        <div class="panel-body">
+<div class="col-md-10 content">
+    <div class="panel panel-default">
+        <div class="panel-heading">Dashboard</div>
+        <div class="btn-group pull-right">
+            <a (click)="editDevice();" class="btn btn-angular btn-sm"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
+        </div>
 
-                            <div *ngIf="step == 1" id="step1">
-                                <form #step1Form="ngForm">
-                                    <div class="form-group">
-                                        <label>Device Name</label>
-                                        <input type="text" class="form-control" [(ngModel)]="deviceItem.display_name" name="name" #name="ngModel" placeholder=" Enter device name " required minlength="4 " maxlength="24 " required>
-                                        <div *ngIf="name.errors && (name.dirty || name.touched) " class="help-block alert alert-danger ">
-                                            <span [hidden]="!name.errors.required ">
-                                                Name is required
-                                            </span>
-                                            <span [hidden]="!name.errors.minlength ">
-                                                Name must be at least 4 characters long.
-                                            </span>
-                                            <span [hidden]="!name.errors.maxlength ">
-                                                Name cannot be more than 24 characters long.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>Device Description</label>
-                                        <input type="text " class="form-control " [(ngModel)]="deviceItem.device_description" name="description" #description="ngModel" placeholder="Enter device name " required minlength="4 " maxlength="24 " required>
-                                        <div *ngIf="description.errors && (description.dirty || description.touched) " class="help-block alert alert-danger ">
-                                            <span [hidden]="!description.errors.required ">
-                                                Description is required
-                                            </span>
-                                            <span [hidden]="!description.errors.minlength ">
-                                                Description must be at least 4 characters long.
-                                            </span>
-                                            <span [hidden]="!description.errors.maxlength ">
-                                                Description cannot be more than 24 characters long.
-                                            </span>
-                                        </div>
-                                    </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <table width="100%" class="table hover">
+                <thead>
+                    <tr>
+                        <th style="width:10%;">STATUS</th>
+                        <th>Name /Description</th>
+                        <th>Sensor / Trigger</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="odd gradeX" *ngFor="let d of deviceItems">
+                        <td style="text-align: center;"><i class="fa fa-cog fa-spin" style="font-size:24px;color:green;"></i>
+                            <p><a href="#">STATUS</a></p>
+                        </td>
+                        <td>
+                            <p style="cursor: pointer;" (click)="editDevice(d.device_id);">{{ d.display_name }}</p>
+                            <small>{{ d.device_description }}</small>
+                        </td>
+                        <td>
+                            <ul *ngFor="let s of d.sensors">
+                                <li>{{ s.sensor_name }} - {{ s.command_type }}</li>
+                            </ul>
+                        </td>
+                        <td>{{ d.description }}</td>
+                        <td class="center">{{ d.register_date | date:'yyyy-mm-dd H:m:s' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a (click)="editDevice();" class="btn btn-angular"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New</a>
+        </div>
+    </div>
+    <!-- /.panel-body -->
+</div>
 
-                                    <div class="form-group ">
-                                        <label>Device Type</label>
-                                        <select [(ngModel)]="deviceItem.device_type" name="type" class="form-control ">
-                                        <option value="0">Raspberry Pi</option>
-                                        <option value="1" selected>Anduino</option>
-                                        <option value="-1">Other</option>
-                                    </select>
-                                        <p class="help-block ">Example block-level help text here.</p>
-                                    </div>
-                                    <div class="form-group ">
-                                        <a (click)="setStep(2); " [ngClass]="{disabled : !step1Form.form.valid} " class="btn btn-angular " style="float:right;margin-bottom:10px "> Next </a>
-                                        <a (click)="hideChildModal(); " class="btn btn-angular " style="float:right;margin-right:10px;margin-bottom:10px; ">Cancel </a>
-                                    </div>
-                                </form>
-                            </div>
 
-                            <div *ngIf="step==2 " id="step2 ">
-                                <div class="form-group ">
-                                    <label>Sensor Name</label>
-                                    <input type="text " class="form-control " [(ngModel)]="sensorItem.sensor_name" placeholder="Enter device name " required>
-                                    <p class="help-block ">Example block-level help text here.</p>
-                                </div>
+<!-- Device Register -->
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="hideChildModal();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> Device Info </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-angular">
+                    <div class="panel-body">
 
-                                <div class="form-group ">
-                                    <label>Send / Receive</label>
-                                    <select [(ngModel)]="sensorItem.sensor_type " class="form-control ">
-                                        <option value="0 ">SEND</option>
-                                        <option value="1 ">RECEIVE</option>
-                                    </select>
-                                    <p class="help-block ">Example block-level help text here.</p>
-                                </div>
-
-                                <div class="form-group ">
-                                    <label>Sensor Command</label>
-                                    <select [(ngModel)]="sensorItem.command_type " class="form-control ">
-                                        <option value="1 ">Trigger </option>
-                                        <option value="2 ">Controle </option>
-                                    </select>
-                                    <p class="help-block ">Example block-level help text here.</p>
-                                </div>
-                                <!--  TRIGGER -->
-                                <div *ngIf="sensorItem.command_type==1 ">
-                                    <div class="form-group ">
-                                        <label>Trigger Name</label>
-                                        <select [(ngModel)]="sensorItem.trigger_name " class="form-control ">
-                                            <option value="1 ">Send Mail</option>
-                                            <option value="2 ">Push Notification</option>
-                                        </select>
-                                        <p class="help-block ">Example block-level help text here.</p>
-                                    </div>
-
-                                    <div class="form-group ">
-                                        <label>Trigger Name</label>
-                                        <select [(ngModel)]="sensorItem.trigger_conditional " class="form-control ">
-                                            <option value="1 ">Send Mail</option>
-                                            <option value="2 ">Push Notification</option>
-                                        </select>
-                                        <p class="help-block ">Example block-level help text here.</p>
-                                    </div>
-
-                                    <div class="form-group ">
-                                        <label>Trigger Name</label>
-                                        <select [(ngModel)]="sensorItem.trigger_conditional " class="form-control ">
-                                            <option value="1 ">Send Mail</option>
-                                            <option value="2 ">Push Notification</option>
-                                        </select>
-                                        <p class="help-block ">Example block-level help text here.</p>
-                                    </div>
-                                </div>
-
-                                <!--  CONTROL -->
-                                <div *ngIf="sensorItem.command_type==2 ">
-                                    <div class="form-group ">
-                                        <label>Controller Command</label>
-                                        <input type="text " class="form-control " [(ngModel)]="sensorItem.control_command " placeholder="Enter device name " required>
-                                        <p class="help-block ">Example block-level help text here.</p>
-                                    </div>
-                                </div>
-
-                                <div class="form-group ">
-                                    <a (click)="setStep(3); " class="btn btn-angular " style="float:right;margin-bottom:10px "> Next </a>
-                                    <a (click)="setStep(1); " class="btn btn-angular " style="float:right;margin-right:10px;margin-bottom:10px; ">Back </a>
-                                </div>
-                            </div>
-
-                            <div *ngIf="step==3 " id="step3 ">
-                                <div class="form-group ">
-                                    <label>Device ID</label>
-                                    <p class="help-block ">{{ deviceItem.device_id}}</p>
-                                </div>
-                                <div class="form-group ">
+                        <div *ngIf="step == 1" id="step1">
+                            <form #step1Form="ngForm">
+                                <div class="form-group">
                                     <label>Device Name</label>
-                                    <p class="help-block ">{{ deviceItem.display_name }}</p>
+                                    <input type="text" class="form-control" [(ngModel)]="deviceItem.display_name" name="name" #name="ngModel" placeholder=" Enter device name " required minlength="4 " maxlength="24 " required>
+                                    <div *ngIf="name.errors && (name.dirty || name.touched) " class="help-block alert alert-danger ">
+                                        <span [hidden]="!name.errors.required ">Name is required</span>
+                                        <span [hidden]="!name.errors.minlength ">Name must be at least 4 characters long.</span>
+                                        <span [hidden]="!name.errors.maxlength ">Name cannot be more than 24 characters long.</span>
+                                    </div>
                                 </div>
                                 <div class="form-group ">
                                     <label>Device Description</label>
-                                    <p class="help-block ">{{ deviceItem.device_description }}</p>
+                                    <input type="text " class="form-control " [(ngModel)]="deviceItem.device_description" name="description" #description="ngModel" placeholder="Enter device name " required minlength="4 " maxlength="24 " required>
+                                    <div *ngIf="description.errors && (description.dirty || description.touched) " class="help-block alert alert-danger ">
+                                        <span [hidden]="!description.errors.required ">Description is required</span>
+                                        <span [hidden]="!description.errors.minlength ">Description must be at least 4 characters long.</span>
+                                        <span [hidden]="!description.errors.maxlength ">Description cannot be more than 24 characters long.</span>
+                                    </div>
                                 </div>
-                                <div class="form-group ">
-                                    <label>Device Sensor Name</label>
-                                    <p class="help-block ">{{ sensorItem.sensor_name }}</p>
-                                </div>
-                                <div class="form-group ">
-                                    <label>Device Sensor Type</label>
-                                    <p class="help-block ">{{ sensorItem.sensor_type }}</p>
-                                </div>
-                                <div class="form-group ">
-                                    <label>Trigget or Controller</label>
-                                    <p class="help-block ">{{ sensorItem.sensor_trigger }}</p>
-                                </div>
-                                <div class="form-group ">
-                                    <label>Controle data</label>
-                                    <p class="help-block ">{{ sensorItem.sensor_controller_command }}</p>
-                                </div>
-                                <div class="form-group ">
-                                    <a *ngIf="deviceItem.$key " (click)="updateData(deviceItem.$key); " class="btn btn-angular " style="float:right;margin-bottom:10px "> Update </a>
-                                    <a *ngIf="!deviceItem.$key " (click)="saveData(); " class="btn btn-angular " style="float:right;margin-bottom:10px "> Save </a>
-                                    <a (click)="setStep(2); " class="btn btn-angular " style="float:right;margin-right:10px;margin-bottom:10px; ">Back </a>
-                                </div>
-                            </div>
 
-                            <div *ngIf="step==4 " id="step4 ">
                                 <div class="form-group ">
-                                    <label>Code Sample </label>
-                                    <textarea cols="80% " rows="18 ">
-                                    </textarea>
+                                    <label>Device Type</label>
+                                    <select [(ngModel)]="deviceItem.device_type" name="type" class="form-control ">
+										<option value="0">Raspberry Pi</option>
+										<option value="1" selected>Anduino</option>
+										<option value="-1">Other</option>
+									</select>
                                     <p class="help-block ">Example block-level help text here.</p>
                                 </div>
                                 <div class="form-group ">
-                                    <a (click)="hideChildModal(); " class="btn btn-angular " style="float:right;margin-bottom:10px "> OK </a>
+                                    <a (click)="setStep(2); " [ngClass]="{disabled : !step1Form.form.valid} " class="btn btn-angular " style="float:right;margin-bottom:10px "> Next </a>
+                                    <a (click)="hideChildModal(); " class="btn btn-angular " style="float:right;margin-right:10px;margin-bottom:10px; ">Cancel </a>
                                 </div>
+                            </form>
+                        </div>
+
+                        <div *ngIf="step==2 " id="step2 ">
+                            <div class="form-group ">
+                                <label>Sensor Name</label>
+                                <input type="text " class="form-control " [(ngModel)]="sensorItem.sensor_name" placeholder="Enter device name " required>
+                                <p class="help-block ">Example block-level help text here.</p>
+                            </div>
+
+                            <div class="form-group ">
+                                <label>Send / Receive</label>
+                                <select [(ngModel)]="sensorItem.sensor_type " class="form-control ">
+									<option value="0 ">SEND</option>
+									<option value="1 ">RECEIVE</option>
+								</select>
+                                <p class="help-block ">Example block-level help text here.</p>
+                            </div>
+
+                            <div class="form-group ">
+                                <label>Sensor Command</label>
+                                <select [(ngModel)]="sensorItem.command_type " class="form-control ">
+									<option value="1 ">Trigger </option>
+									<option value="2 ">Controle </option>
+								</select>
+                                <p class="help-block ">Example block-level help text here.</p>
+                            </div>
+                            <!--  TRIGGER -->
+                            <div *ngIf="sensorItem.command_type==1 ">
+                                <div class="form-group ">
+                                    <label>Trigger Name</label>
+                                    <select [(ngModel)]="sensorItem.trigger_name " class="form-control ">
+										<option value="1 ">Send Mail</option>
+										<option value="2 ">Push Notification</option>
+									</select>
+                                    <p class="help-block ">Example block-level help text here.</p>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label>Trigger Name</label>
+                                    <select [(ngModel)]="sensorItem.trigger_conditional " class="form-control ">
+										<option value="1 ">Send Mail</option>
+										<option value="2 ">Push Notification</option>
+									</select>
+                                    <p class="help-block ">Example block-level help text here.</p>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label>Trigger Name</label>
+                                    <select [(ngModel)]="sensorItem.trigger_conditional " class="form-control ">
+										<option value="1 ">Send Mail</option>
+										<option value="2 ">Push Notification</option>
+									</select>
+                                    <p class="help-block ">Example block-level help text here.</p>
+                                </div>
+                            </div>
+
+                            <!--  CONTROL -->
+                            <div *ngIf="sensorItem.command_type==2 ">
+                                <div class="form-group ">
+                                    <label>Controller Command</label>
+                                    <input type="text " class="form-control " [(ngModel)]="sensorItem.control_command " placeholder="Enter device name " required>
+                                    <p class="help-block ">Example block-level help text here.</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <a (click)="setStep(3); " class="btn btn-angular " style="float:right;margin-bottom:10px "> Next </a>
+                                <a (click)="setStep(1); " class="btn btn-angular " style="float:right;margin-right:10px;margin-bottom:10px; ">Back </a>
+                            </div>
+                        </div>
+
+                        <div *ngIf="step==3 " id="step3 ">
+                            <div class="form-group ">
+                                <label>Device ID</label>
+                                <p class="help-block ">{{ deviceItem.device_id}}</p>
+                            </div>
+                            <div class="form-group ">
+                                <label>Device Name</label>
+                                <p class="help-block ">{{ deviceItem.display_name }}</p>
+                            </div>
+                            <div class="form-group ">
+                                <label>Device Description</label>
+                                <p class="help-block ">{{ deviceItem.device_description }}</p>
+                            </div>
+                            <div class="form-group ">
+                                <label>Device Sensor Name</label>
+                                <p class="help-block ">{{ sensorItem.sensor_name }}</p>
+                            </div>
+                            <div class="form-group ">
+                                <label>Device Sensor Type</label>
+                                <p class="help-block ">{{ sensorItem.sensor_type }}</p>
+                            </div>
+                            <div class="form-group ">
+                                <label>Trigget or Controller</label>
+                                <p class="help-block ">{{ sensorItem.sensor_trigger }}</p>
+                            </div>
+                            <div class="form-group ">
+                                <label>Controle data</label>
+                                <p class="help-block ">{{ sensorItem.sensor_controller_command }}</p>
+                            </div>
+                            <div class="form-group ">
+                                <a *ngIf="deviceItem.$key " (click)="updateData(deviceItem.$key); " class="btn btn-angular " style="float:right;margin-bottom:10px "> Update </a>
+                                <a *ngIf="!deviceItem.$key " (click)="saveData(); " class="btn btn-angular " style="float:right;margin-bottom:10px "> Save </a>
+                                <a (click)="setStep(2); " class="btn btn-angular " style="float:right;margin-right:10px;margin-bottom:10px; ">Back </a>
+                            </div>
+                        </div>
+
+                        <div *ngIf="step==4 " id="step4 ">
+                            <div class="form-group ">
+                                <label>Code Sample </label>
+                                <textarea cols="80% " rows="18 "></textarea>
+                                <p class="help-block ">Example block-level help text here.</p>
+                            </div>
+                            <div class="form-group ">
+                                <a (click)="hideChildModal(); " class="btn btn-angular " style="float:right;margin-bottom:10px "> OK </a>
                             </div>
                         </div>
                     </div>
@@ -234,6 +270,4 @@
             </div>
         </div>
     </div>
-    <!-- Device Register -->
 </div>
-<!-- /#page-wrapper -->

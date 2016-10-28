@@ -10,7 +10,9 @@ import { User } from '../object/user.object';
   templateUrl: './admin.component.html'
 })
 export class AdminComponent extends BaseComponent implements OnInit {
-public isCollapsed: boolean = true;
+
+  public isCollapsed: boolean = true;
+  public status: { isopen: boolean } = { isopen: false };
 
   userProfile: User = {
     uid: "",
@@ -72,6 +74,12 @@ public isCollapsed: boolean = true;
   onChange(event) {
     this.userProfileImageFile = event.target.files[0];
     this.fileName = this.userProfileImageFile.name;
+  }
+
+  public toggleDropdown($event: MouseEvent): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.status.isopen = !this.status.isopen;
   }
 
 }

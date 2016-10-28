@@ -1,72 +1,73 @@
 <nav class="navbar navbar-fixed-top navbar-light bg-faded">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">HOME</a>
-            <a class="navbar-toggle collapsed" (click)="isCollapsed = !isCollapsed">
-                <span class="glyphicon glyphicon-menu-hamburger"></span>
-            </a>
-        </div>
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">HOME</a>
+			<a class="navbar-toggle collapsed" (click)="isCollapsed = !isCollapsed">
+				<span class="glyphicon glyphicon-menu-hamburger"></span>
+			</a>
+		</div>
 
-        <div class="nav navbar-top-links navbar-right" style="margin-top:8px;">
-            <!-- Single button -->
-            <div class="btn-group" dropdown [(isOpen)]="status.isopen">
-                <button id="single-button" type="button" class="btn btn-primary" dropdownToggle [disabled]="disabled">
+		<div class="nav navbar-top-links navbar-right" style="margin-top:8px;">
+			<!-- Single button -->
+			<div class="btn-group" dropdown [(isOpen)]="status.isopen">
+				<button id="single-button" type="button" class="btn btn-primary" dropdownToggle [disabled]="disabled">
       Language <span class="caret"></span>
     </button>
-                <ul dropdownMenu role="menu" aria-labelledby="single-button">
-                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('ja')">日本語</a></li>
-                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('en')">English</a></li>
-                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('cn')">中国語</a></li>
-                    <li role="menuitem"><a class="dropdown-item" (click)="changeLang('ko')">韓国語</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+				<ul dropdownMenu role="menu" aria-labelledby="single-button">
+					<li role="menuitem"><a class="dropdown-item" (click)="changeLang('ja')">日本語</a></li>
+					<li role="menuitem"><a class="dropdown-item" (click)="changeLang('en')">English</a></li>
+					<li role="menuitem"><a class="dropdown-item" (click)="changeLang('cn')">中国語</a></li>
+					<li role="menuitem"><a class="dropdown-item" (click)="changeLang('ko')">韓国語</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </nav>
 <div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="login-panel panel panel-angular">
-                <div class="panel-heading">
-                    <h3 class="panel-title"> {{ langItem?.please_login }} </h3>
-                </div>
-                <div *ngIf="error != undefined " class="panel-body">
-                    <div class="alert alert-warning">{{ error.message }} </div>
-                </div>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4">
+			<div class="login-panel panel panel-angular">
+				<div class="panel-heading">
+					<h3 class="panel-title"> {{ langItem?.please_login }} </h3>
+				</div>
+				<div *ngIf="error != undefined " class="panel-body">
+					<div class="alert alert-warning">{{ error.message }} </div>
+				</div>
 
-                <div class="panel-body" *ngIf="userId == undefined">
-                    <fieldset>
-                        <div class="form-group">
-                            <input class="form-control" placeholder="E-mail" name="email" type="email" (change)="email=$event.target.value" value="demo@demo.com" autofocus>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" placeholder="Password" name="password" type="password" value="demodemo" (change)="password=$event.target.value">
-                        </div>
-                        <!-- Change this to a button or input when using this as a form -->
-                    </fieldset>
-                    <div *ngIf="isRegister == true">
-                        <a (click)="registerUser();" class="btn btn-lg btn-success btn-block">Register User</a>
-                        <a (click)="cancel();" class="btn btn-lg btn-danger btn-block">Cancel</a>
-                    </div>
-                    <div *ngIf="isRegister == false">
-                        <a (click)="login(1);" class="btn btn-lg btn-angular btn-block">{{ langItem?.login }}</a>
-                        <div class="social-icon">
-                            <a (click)="login(2);" class="btn btn-social-icon btn-twitter">
-                                <span class="fa fa-twitter"></span>
-                            </a>
-                            <a (click)="login(3);" class="btn btn-social-icon btn-facebook">
-                                <span class="fa fa-facebook"></span>
-                            </a>
-                            <a (click)="login(4);" class="btn btn-social-icon btn-google">
-                                <span class="fa fa-google"></span>
-                            </a>
-                            <a (click)="login(5);" class="btn btn-social-icon btn-github">
-                                <span class="fa fa-github"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+				<div class="panel-body" *ngIf="userId == undefined">
+					<fieldset>
+						<div class="form-group">
+							<input class="form-control" placeholder="E-mail" name="email" type="email" (change)="email=$event.target.value" value="demo@demo.com"
+								autofocus>
+						</div>
+						<div class="form-group">
+							<input class="form-control" placeholder="Password" name="password" type="password" value="demodemo" (change)="password=$event.target.value">
+						</div>
+						<!-- Change this to a button or input when using this as a form -->
+					</fieldset>
+					<div *ngIf="isRegister == true">
+						<a (click)="registerUser();" class="btn btn-lg btn-success btn-block">Register User</a>
+						<a (click)="cancel();" class="btn btn-lg btn-danger btn-block">Cancel</a>
+					</div>
+					<div *ngIf="isRegister == false">
+						<a (click)="login(1);" class="btn btn-lg btn-angular btn-block">{{ langItem?.login }}</a>
+						<div class="social-icon">
+							<a (click)="login(2);" class="btn btn-social-icon btn-twitter">
+								<span class="fa fa-twitter"></span>
+							</a>
+							<a (click)="login(3);" class="btn btn-social-icon btn-facebook">
+								<span class="fa fa-facebook"></span>
+							</a>
+							<a (click)="login(4);" class="btn btn-social-icon btn-google">
+								<span class="fa fa-google"></span>
+							</a>
+							<a (click)="login(5);" class="btn btn-social-icon btn-github">
+								<span class="fa fa-github"></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
