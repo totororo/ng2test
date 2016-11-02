@@ -7,7 +7,8 @@ import { User } from '../object/user.object';
 
 @Component({
   selector: 'app-admin',
-  templateUrl: './admin.component.html'
+  templateUrl: './admin.component.html',
+
 })
 export class AdminComponent extends BaseComponent implements OnInit {
 
